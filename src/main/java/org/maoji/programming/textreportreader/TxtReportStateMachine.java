@@ -68,7 +68,7 @@ import java.util.logging.Logger;
 class TxtReportStateMachine {
 
     private final static Logger LOGGER = Logger.getLogger(TxtReportStateMachine.class.getName());
-    private StateI state = new PendingState();
+    private StateI state;
     private Integer count = 0;
     TxtReport report;
     TxtReportConfig setting;
@@ -80,6 +80,23 @@ class TxtReportStateMachine {
      * */
     TxtReportStateMachine(TxtReportConfig setting){
         this.setting = setting;
+        this.setInitialState();
+
+    }
+    /**
+     * set the initial state based on the setting
+     *
+     * */
+    private void setInitialState(){
+        switch (setting.TYPE){
+            case TABLE_TEXT:
+                this.state = new PendingTableState();
+                break;
+            case REGULAR:
+            default:
+                this.state = new PendingState();
+                break;
+        }
     }
     /**
      * Control the status transition

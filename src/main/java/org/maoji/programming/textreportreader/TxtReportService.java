@@ -113,6 +113,7 @@ public final class TxtReportService<D extends TxtReportDictionary,T extends TxtR
      * @param config the configuration
      * @throws TxtReportException throws the exception during the validation, processing
      * */
+
     public TxtReportService(Class<D> dictClass, Class<T> tableClass, String path, TxtReportConfig config) throws TxtReportException {
 
             this.dictClass = dictClass;

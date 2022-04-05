@@ -21,9 +21,10 @@ class TableState implements StateI {
     private Boolean isFirst = true;
 
     //private Class cls;
-    //public TableState(Class cls){
-    //    this.cls = cls;
-    //}
+    TableState ignoreFirstRow(Boolean value){
+        this.isFirst = value;
+        return this;
+    }
 
     @Override
     public void transit(TxtReportStateMachine fsm, String line) {
