@@ -2,7 +2,7 @@
 
 <b>Text Report Reading Service</b> is tools that processing the .txt report and retrieve the data from dictionary entries and table.
 
-## Structure of text Report
+## Structure of Text Report
 
 Text report is a .txt file formatted as a report. It includes multiple pages. Each pages may consist of a dictionary section and a table section.
 The example of the text report is in below:
@@ -33,6 +33,8 @@ The example of the text report is in below:
 
 ```
 
+
+
 ### Trigger Keywords
 
 "~" is the starting trigger word that mark the range of a page.
@@ -45,11 +47,22 @@ For example, the dictionary section of the first page includes the dataset,<code
 
 ### Table Section
 The section includes a list of records.
-For Example, the table section in the secord page includes the list that
+For example, the table section in the second page includes the list that
 <code>
 [{"NAME":"Sam Smith", "AGE":50,"MEMBER?": false},{"NAME":"Terry Troat", "AGE":22, "MEMBER?": true}]
 </code>
-
+## Structure of Raw Table Text
+Also, the service is available for loading the file of raw table text that:
+```
+012460001111199902010
+022460001112199903140
+032460001113200309110
+042460001114200409210
+052460001115200604101
+061330001121200606301
+072460001122200910110
+```
+In this case, the substring in [0,2) represents <code>RID</code>, the substring in [2,12) represents <code>ACCOUNT_NO</code>, the substring in [12,20) represents <code>STARTING_DATE</code> and finally the substring in [20,21) represents <code>IS_DELETED</code>.
 
 ## Processing Logic
 
@@ -62,6 +75,9 @@ stateDiagram
     Dictionary --> Table
     Table --> Dictionary
     
+    [*] --> PendingTable
+    PendingTable --> Table
+    
     Table --> End
     Dictionary --> End
     
@@ -73,9 +89,14 @@ stateDiagram
 ## Usage
 First, create an Object of <code>TxtReportConfig</code> for setting keywords of triggering the content of text report.
 ```java
-TxtReportConfig config = new TxtReportConfig("~","*END OF REPORT*");
+TxtReportConfig config = TxtReportConfig.getConfig()
+        .setStart("~")
+        .setEnd("** END OF REPORT ** ")
+        .setReportType(TxtReportType.REGULAR);
 ```
-Second, create the class of the dictionary model and the table model.
+The report type parameter is <code>TxtReportType.TABLE_TEXT</code> if it is raw table text
+
+Second, create the class of the dictionary model, and the table model.
 ```java
 @TxtReportDictionary
 class theDict{
@@ -118,6 +139,8 @@ TxtReportService service = new TxtReportService(
   "/to/the/filepath",                           // filepath of the .txt file
   config);                                      // TxtReportConfig object
 ```
+In addition, if text report does not involve table section, <code>DefaultTable.class</code> can be put in the table class parameter. It can be applied in dictionary section which is <code>DefaultDictionary.class</code>
+
 In the last stage, exporting methods can be chosen depends on the need.
 
 ```java
