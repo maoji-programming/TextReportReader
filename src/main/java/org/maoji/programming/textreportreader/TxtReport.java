@@ -1,5 +1,6 @@
 package org.maoji.programming.textreportreader;
 
+import com.google.gson.annotations.Expose;
 import org.maoji.programming.textreportreader.exception.TxtReportException;
 import org.maoji.programming.textreportreader.exception.TxtReportExceptionCode;
 
@@ -20,10 +21,8 @@ public class TxtReport<D,T> {
 
     private List<TxtReportPage> pages= new ArrayList();
 
-
-    private final Class<D> dictClass;
-
-    private final Class<T> tableClass;
+    private final transient Class<D> dictClass;
+    private final transient Class<T> tableClass;
 
     TxtReport(){
         dictClass = null;
@@ -59,7 +58,7 @@ public class TxtReport<D,T> {
      *
      * @return the last page if number of pages is not zero.
      * */
-    public TxtReportPage getCurrentPage(){
+    public TxtReportPage<D,T> getCurrentPage(){
         if(numOfPages != 0) return pages.get(numOfPages - 1);
         else return null;
     }

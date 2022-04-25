@@ -14,7 +14,8 @@ public enum TxtReportExceptionCode {
     TXT004("Insufficient annotations for the column/field."),
     TXT005("Input file does not exist."),
     TXT006("Failed to create a new page."),
-    TXT007("Failed to retrieve xml file.")
+    TXT007("Failed to retrieve xml file."),
+    TXT008("Failed to retrieve json file.")
     ;
 
     String message;

@@ -1,5 +1,7 @@
 package org.maoji.programming.textreportreader;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.maoji.programming.textreportreader.annotation.Column;
 import org.maoji.programming.textreportreader.annotation.Pair;
 import org.maoji.programming.textreportreader.annotation.TxtReportDictionary;
@@ -212,11 +214,18 @@ public final class TxtReportService<D extends TxtReportDictionary,T extends TxtR
 
     }
     /**
-     * Retrieve the report in .josn file
-     * @param filepath location of output xml file
-     * @throws TxtReportException failed to export the xml file
+     * Retrieve the report in .json file
+     * @param filepath location of output json file
+     * @throws TxtReportException failed to export the json file
      */
     public void retrieveJson(String filepath)throws TxtReportException{
+        try (FileWriter fw = new FileWriter(filepath)){
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(this.stateMachine.report, TxtReport.class);
+            fw.append(s);
+        }catch (Exception e){
+            throw new TxtReportException(TxtReportExceptionCode.TXT008,e);
+        }
     }
 
     /**
@@ -237,6 +246,7 @@ public final class TxtReportService<D extends TxtReportDictionary,T extends TxtR
 
 
     }
+
     /**
      * Retrieve the report
      *
